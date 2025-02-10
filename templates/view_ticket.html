@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Ticket</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .main-container {
+            width: 80%;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        .ticket-header {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .ticket-body {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+        }
+        .chat-container {
+            flex: 2;
+            padding: 15px;
+            background: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            height: 400px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .message {
+            padding: 10px;
+            border-radius: 8px;
+            max-width: 75%;
+            margin-bottom: 10px;
+        }
+        .message.user {
+            background-color: #d1e7ff;
+            align-self: flex-start;
+        }
+        .message.agent {
+            background-color: #d4edda;
+            align-self: flex-end;
+            text-align: right;
+        }
+        .message-input {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+        }
+        .message-input textarea {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .message-input button {
+            padding: 8px 12px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .details-table {
+            flex: 1;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            height: fit-content;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+            display: inline-block;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="ticket-header">
+            {{ ticket.subject }}
+        </div>
+        
+        <div class="ticket-body">
+            <!-- Chat Section -->
+            <div class="chat-container">
+                <h3>Chat History</h3>
+                {% for comment in ticket.comments %}
+                    <div class="message {% if comment.user.role == 'it' %}agent{% else %}user{% endif %}">
+                        <strong>{{ comment.user.name }}:</strong>
+                        <p>{{ comment.text }}</p>
+                        <small>{{ comment.created_at }}</small>
+                    </div>
+                {% endfor %}
+
+                <!-- Add New Comment -->
+                <form method="POST" action="{{ url_for('add_comment', ticket_id=ticket.id) }}">
+                    <div class="message-input">
+                        <textarea name="comment_text" rows="2" placeholder="Type a message..." required></textarea>
+                        <button type="submit">Send</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Ticket Details -->
+            <div class="details-table">
+                <p><strong>Ticket ID:</strong> {{ ticket.id }}</p>
+                <p><strong>Status:</strong> {{ ticket.status }}</p>
+                <form method="POST" action="{{ url_for('change_ticket_status', ticket_id=ticket.id) }}">
+                    <label for="status"><strong>Update Status:</strong></label>
+                    <select name="status" id="status" class="form-control">
+                        <option value="open" {% if ticket.status == 'open' %}selected{% endif %}>Open</option>
+                        <option value="pending" {% if ticket.status == 'pending' %}selected{% endif %}>Pending</option>
+                        <option value="closed" {% if ticket.status == 'closed' %}selected{% endif %}>Closed</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Update</button>
+                </form>
+                <p><strong>Created At:</strong> {{ ticket.created_at }}</p>
+                <p><strong>Agent:</strong> {% if ticket.agent %} {{ ticket.agent.name }} ({{ ticket.agent.email }}) {% else %} Not assigned {% endif %}</p>
+                <p><strong>Requester:</strong> {{ ticket.user.name }}</p>
+            </div>
+        </div>
+
+
+
+        <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+    </div>
+</body>
+</html>

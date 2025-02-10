@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Tickets</title>
+</head>
+<body>
+    <h2>All Tickets</h2>
+    <ul>
+        {% for ticket in tickets %}
+            <li>
+                <a href="{{ url_for('view_ticket', ticket_id=ticket.id) }}">{{ ticket.subject }}</a>
+                - Status: {{ ticket.status }}
+                - Created by: {{ ticket.user.name }}
+                <form method="POST" action="{{ url_for('update_ticket_status', ticket_id=ticket.id) }}">
+                    <select name="status">
+                        <option value="open" {% if ticket.status == "open" %}selected{% endif %}>Open</option>
+                        <option value="in_progress" {% if ticket.status == "in_progress"}>In Progress</option>
+                        <option value="resolved" {% if ticket.status == "resolved" %}selected{% endif %}>Resolved</option>
+                    </select>
+
+                    <select name="agent">
+                        <option value="">Unassigned</option>
+                        {% for agent in agents %}
+                            <option value="{{ agent.id }}" {% if ticket.agent and ticket.agent.id == agent.id %}selected{% endif %}>
+                                {{ agent.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit">Update</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+</body>
+</html>
