@@ -9,6 +9,6 @@ To log in and test the ticket system, you can use these sample user accounts:
 | Customer  | Miray  | miray@customer.com   | 123456    |
 |    IT     | Cansu  | cansu@itcompany.com  | 123456    |
 
-Have fun talking to yourself :grinning:
+Have fun talking to yourself! :grinning:
 
 
