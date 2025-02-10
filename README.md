@@ -1,6 +1,6 @@
 ## Sample Users for Testing
 
-To log in and test the system, you can use these sample user accounts:
+To log in and test the ticket system, you can use these sample user accounts:
 
 | Role      | Name   |       Email          | Password  |
 |-----------|--------|----------------------|-----------|
@@ -8,5 +8,7 @@ To log in and test the system, you can use these sample user accounts:
 |    IT     | Furkan | furkan@itcompany.com | 123456    |
 | Customer  | Miray  | miray@customer.com   | 123456    |
 |    IT     | Cansu  | cansu@itcompany.com  | 123456    |
+
+Have fun talking to yourself :grinning:
 
 
